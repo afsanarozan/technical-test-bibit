@@ -1,0 +1,30 @@
+default: 
+  image: 
+    name: baseimage:v1
+
+unit testing:
+  stage: unit-testing
+  inherit: 
+    default: true
+  script:
+    - echo "unit testing"
+
+build image:
+  stage: build
+  inherit: 
+    default: true
+  script:
+    - echo "build image docker"
+    - docker build -t ${name_your_registry}/app .
+    - docker build -t ${name_your_registry}/app:$CI_JOB_ID .
+    - docker push ${name_your_registry}/app:latest
+    - docker push ${name_your_registry}/app:CI_JOB_ID
+
+
+deploy to production:
+  stage: deploy
+  script: 
+    - echo "deploy"
+    - sudo ssh ubuntu@10.*.*.* -i ${your_key} 'ansible-playbook ${your yaml file}.yaml'
+
+
