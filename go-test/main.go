@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gin-gonic/gin"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -19,34 +18,22 @@ type dummy struct {
 	Price  float64 `json:"price"`
 }
 
-// albums slice to seed record album data.
-var dataDummy = []dummy{
-	{ID: "1", Title: "Blue Train", Artist: "John Coltrane", Price: 56.99},
-	{ID: "2", Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99},
-	{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
-}
-
-var dataWeather = struct{ Status string }{Status: "OK"}
-
 func main() {
 
 	e := echo.New()
-	// router := gin.Default()
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
 	e.GET("/", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, "Hello, Docker! <3")
+		return c.HTML(http.StatusOK, "OK")
 	})
 
 	e.GET("/ping", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, struct{ Status string }{Status: "OK"})
 	})
 
-	e.GET("/weather", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, func.getWeather)
-	})
+	e.GET("/weather", getWeather)
 
 	e.GET("/endpoint", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, dataDummy)
@@ -57,21 +44,17 @@ func main() {
 		httpPort = "8080"
 	}
 
-	router := gin.Default()
-	router.GET("/endpoint", getDummy)
-	// router.GET("/wheather", getWeather)
-
-	// router.Run("localhost:8080")
-
 	e.Logger.Fatal(e.Start(":" + httpPort))
 }
 
-// getAlbums responds with the list of all albums as JSON.
-func getDummy(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, dataDummy)
+// data dummy slice to seed record album data.
+var dataDummy = []dummy{
+	{ID: "1", Title: "Blue Train", Artist: "John Coltrane", Price: 56.99},
+	{ID: "2", Title: "Jeru", Artist: "Gerry Mulligan", Price: 17.99},
+	{ID: "3", Title: "Sarah Vaughan and Clifford Brown", Artist: "Sarah Vaughan", Price: 39.99},
 }
 
-func getWeather(c echo.Context) {
+func getWeather(c echo.Context) error {
 	url := "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m"
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -87,7 +70,6 @@ func getWeather(c echo.Context) {
 	if readErr != nil {
 		fmt.Print(err.Error())
 	}
-	c.JSON(http.StatusOK, string(body))
 
-	fmt.Println(string(body))
+	return c.JSON(http.StatusOK, string(body))
 }
