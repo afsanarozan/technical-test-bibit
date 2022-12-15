@@ -23,12 +23,12 @@
       - don’t forget to update database version and always backup before updating
       
     C. network subnet design 
-      - in diagram we can see, we use private subnet, for security, and server can,t access from outside, but the problem is we can't access too, how to solve it maybe we can provide vpn for to access it, we can use openvpn or pritunl
+      - in diagram we can see, we use private subnet, for security, and server can't access from outside, but the problem is we can't access too, how to solve it? maybe we can provide vpn for to access it, we can use openvpn or pritunl
       
     D. security groups beetween groupings
       - I already provide it in terraform, and will implement it to our autoscalling group 
 
-3. I already put sample code for terraform, just to create autoscalling group, target group, and alb (application load balancer) on aws
+3. I already put sample code for terraform, just to create and setup autoscalling group, target group, and alb (application load balancer) on aws
    check on folder terraform-test https://github.com/afsanarozan/technical-test-bibit/tree/master/terraform-test 
    
 5. Actually I use gitlab-ci.yml just if there is special case on services, I more used to jenkins then gitlab-ci.yml, 
@@ -37,6 +37,8 @@
    and diagram flow design 
    
    ![alt_text](https://user-images.githubusercontent.com/68263390/207793695-b7ba2619-7baf-43ff-a7a6-fdd4f95879f1.png)
+   
+   Sory, I am not including terraform in cicd, because I think my terraform is'nt best practice implement on cicd, feel free if you have any suggestion.. 
 
 5. Already setup 
 
