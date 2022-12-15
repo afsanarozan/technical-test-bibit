@@ -30,7 +30,7 @@ data "aws_subnet" "my_subnet" {
 }
 
 resource "aws_launch_template" "golang-app-lt" {
-    name = "kump-streamer"
+    name = "golang-app"
     image_id = "${your_ami}"
     instance_type = "c4.large"
     vpc_security_group_ids = ["${your_security_group}"]
@@ -66,7 +66,7 @@ resource "aws_autoscaling_group" "golang-app-asg" {
     desired_capacity          = 1
     vpc_zone_identifier       = [data.aws_subnet.my_subnet.id]
     launch_template {
-        id      = aws_launch_template.kump-streamer-lt.id
+        id      = aws_launch_template.golang-app-lt.id
         version = "$Latest"
     }
     target_group_arns = [aws_lb_target_group.golang-app-tg.id]
